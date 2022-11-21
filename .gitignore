@@ -1,0 +1,9 @@
+# Byte-compiled / optimized / DLL files
+__pycache__
+
+# Virtual environments
+venv
+
+# IntelliJ
+.idea
+*.iml
