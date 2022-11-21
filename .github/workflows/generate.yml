@@ -2,10 +2,10 @@ name: generate
 
 on:
   schedule:
-    - cron: "40 * * * *"
+    - cron: "50 * * * *"
 
 jobs:
-  tests:
+  go:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
