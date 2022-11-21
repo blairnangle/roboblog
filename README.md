@@ -14,6 +14,35 @@ Automated blog post writing using the Open AI API.
 
 ## Usage
 
+- Create a virtual environment:
+
+```shell
+python -m venv .venv
+```
+- Activate the virtual environment:
+
+```shell
+source .venv/bin/activate
+```
+- Install requirements:
+
+```shell
+pip install -r requirements.txt
+```
+
+- Export relevant authentication env vars:
+
+```shell
+export OPENAI_API_KEY=<insert Open AI API key>
+export PERSONAL_ACCESS_TOKEN=<insert GitHub fine-grained personal access token>
+```
+
+- Go:
+
+```shell
+./go.py
+```
+
 ## Authentication
 
 ### Open AI
