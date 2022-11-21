@@ -13,4 +13,8 @@ jobs:
           python-version: "3.9"
           cache: pip
       - run: pip install -r requirements.txt
-      - run: ./go.py
+      - name: go
+        env:
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: ./go.py
