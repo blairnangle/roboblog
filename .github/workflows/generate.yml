@@ -1,8 +1,7 @@
 name: generate
 
 on:
-  schedule:
-    - cron: "25,30 * * * *"
+  push
 
 jobs:
   go:
@@ -11,6 +10,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
+          python-version: "3.9"
           cache: pip
       - run: pip install -r requirements.txt
       - run: ./go.py
