@@ -62,7 +62,7 @@ state = random.choice(["Alabama",
 city_data = requests.request(method="GET", url=f"https://data.opendatasoft.com/api/records/1.0/search/?dataset=us-cities-demographics%40public&q=&facet=city&facet=state&refine%2Estate={state}").json()["records"][math.floor(random.uniform(0, 9))]["fields"]
 city = city_data["city"]
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = os.environ["OPENAI_API_KEY"]
 model = random.choice([model["id"] for model in openai.Model.list()["data"]])
 topic = f"{city}, {state}"
 prompt = f"Can you tell me about {topic} in complete sentences?"
@@ -89,7 +89,7 @@ footer = f"""
 **Written using [Open AI](https://openai.com/)'s `{model}` model with a temperature of {str(temperature)}.**
 """
 
-github_personal_access_token = os.getenv("PERSONAL_ACCESS_TOKEN")
+github_personal_access_token = os.environ["PERSONAL_ACCESS_TOKEN"]
 g = Github(github_personal_access_token)
 repo = g.get_repo("blairnangle/blairnangle-dot-com")
 repo.create_file(
