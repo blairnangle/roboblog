@@ -59,9 +59,8 @@ state = random.choice(["Alabama",
                        "Wisconsin",
                        "Wyoming"])
 
-city_data = requests.request(method="GET", url=f"https://data.opendatasoft.com/api/records/1.0/search/?dataset=us-cities-demographics%40public&q=&facet=city&facet=state&refine%2Estate={state}").json()["records"][math.floor(random.uniform(0, 10))]["fields"]
+city_data = requests.request(method="GET", url=f"https://data.opendatasoft.com/api/records/1.0/search/?dataset=us-cities-demographics%40public&q=&facet=city&facet=state&refine%2Estate={state}").json()["records"][math.floor(random.uniform(0, 9))]["fields"]
 city = city_data["city"]
-state = city_data["state"]
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 model = random.choice([model["id"] for model in openai.Model.list()["data"]])
