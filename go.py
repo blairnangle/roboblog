@@ -2,6 +2,7 @@
 
 import os
 import random
+import string
 from datetime import datetime
 import math
 import requests
@@ -12,7 +13,7 @@ state = random.choice(["Alabama",
                        "Alaska",
                        "Arizona",
                        "Arkansas",
-                       "California"
+                       "California",
                        "Colorado",
                        "Connecticut",
                        "Delaware",
@@ -46,42 +47,52 @@ state = random.choice(["Alabama",
                        "Oklahoma",
                        "Oregon",
                        "Pennsylvania",
-                       "Rhode Island",
+                       # "Rhode Island",
                        "South Carolina",
                        "South Dakota",
                        "Tennessee",
                        "Texas",
                        "Utah",
-                       "Vermont",
+                       # "Vermont",
                        "Virginia",
                        "Washington",
-                       "West Virginia",
+                       # "West Virginia",
                        "Wisconsin",
-                       "Wyoming"])
+                       # "Wyoming"
+                       ])
 
-city_data = requests.request(method="GET", url=f"https://data.opendatasoft.com/api/records/1.0/search/?dataset=us-cities-demographics%40public&q=&facet=city&facet=state&refine%2Estate={state}").json()["records"][math.floor(random.uniform(0, 9))]["fields"]
+city_data = requests.request(method="GET", url=f"https://data.opendatasoft.com/api/records/1.0/search/?dataset=us-cities-demographics%40public&q=&facet=city&facet=state&refine%2Estate={state}").json()["records"][math.floor(random.uniform(0, 5))]["fields"]
 city = city_data["city"]
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
-model = random.choice([model["id"] for model in openai.Model.list()["data"]])
+# model = random.choice([model["id"] for model in openai.Model.list()["data"]])
+model = "text-davinci-002"
 topic = f"{city}, {state}"
-prompt = f"Can you tell me about {topic} in complete sentences?"
+tone = random.choice([
+    "satirical", "downbeat", "humorous", "passive-aggressive", "biased", "historical"
+])
+prompt = f"Write a {tone} blog post about {topic} in complete sentences"
 temperature = round(random.uniform(0, 1), 1)
 body = openai.Completion.create(
-    model=model,
+    model="text-davinci-002",
     prompt=prompt,
-    max_tokens=100,
+    max_tokens=1000,
     temperature=temperature
 )["choices"][0]["text"].strip() + "\n"
 
-front_matter = f"""
----
+front_matter = f"""---
 title: "RoboBlog: {topic}"
-date: {datetime.today().strftime("%Y-%m-%d")}
+date: "{str(datetime.today().strftime("%Y-%m-%d"))}"
 publish: true
-excerpt: {body[:20]}…
+excerpt: "{body[:50]}…"
 postType: "generative"
 ---
+#
+"""
+
+introduction = f"""
+***{prompt}***
+
 """
 
 footer = f"""
@@ -92,8 +103,9 @@ footer = f"""
 github_personal_access_token = os.getenv("PERSONAL_ACCESS_TOKEN")
 g = Github(github_personal_access_token)
 repo = g.get_repo("blairnangle/blairnangle-dot-com")
+subdir = topic.translate(str.maketrans('', '', string.punctuation)).lower().replace(' ', '-')
 repo.create_file(
-    path=f"./src/content/posts/generative/{topic}/index.mdx",
+    path=f"./src/content/posts/generative/{subdir}/index.mdx",
     message=f"[RoboBlog] Create generative blog post about {topic}",
-    content=front_matter + body + footer
+    content=front_matter + introduction + body + footer
 )
