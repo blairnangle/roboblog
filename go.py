@@ -66,7 +66,7 @@ city = city_data["city"]
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 # model = random.choice([model["id"] for model in openai.Model.list()["data"]])
-model = "text-davinci-002"
+model = "text-davinci-003"
 topic = f"{city}, {state}"
 tone = random.choice([
     "satirical", "downbeat", "humorous", "passive-aggressive", "biased", "historical"
@@ -74,7 +74,7 @@ tone = random.choice([
 prompt = f"Write a {tone} blog post about {topic} in complete sentences"
 temperature = round(random.uniform(0, 1), 1)
 body = openai.Completion.create(
-    model="text-davinci-002",
+    model=model,
     prompt=prompt,
     max_tokens=1000,
     temperature=temperature
