@@ -7,3 +7,6 @@ venv
 # IntelliJ
 .idea
 *.iml
+
+# Project-specific Git commit message (to configure: git config commit.template .gitmessage)
+.gitmessage

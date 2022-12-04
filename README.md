@@ -7,9 +7,7 @@ Automated blog post writing using the Open AI API.
 ## Mechanism
 
 1. Come up with a pseudorandom prompt—this should change frequently!
-2.
-   1. Randomly choose an Open AI model
-   2. use the Completions API to generate the body of the blog post
+2. Use the Completions API to generate the body of the blog post
 3. Use the `PyGithub` library to create a new blog post in the `blairnangle/blairnangle-dot-com` repo (to be displayed at [blairnangle.com/generative](https://blairnangle.com/generative)) with appropriate front matter and footer
 
 ## Usage
@@ -44,6 +42,11 @@ export PERSONAL_ACCESS_TOKEN=<insert GitHub fine-grained personal access token>
 ```
 
 ## Authentication
+
+### Wordnik
+
+Apply for an API key (this can take a few days). Once it has been granted, save it as a GitHub
+Secret named `WORDNIK_API_KEY`.
 
 ### Open AI
 

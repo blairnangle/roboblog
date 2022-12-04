@@ -2,110 +2,32 @@
 
 import os
 import random
-import string
-from datetime import datetime
-import math
-import requests
-import openai
-from github import Github
 
-state = random.choice(["Alabama",
-                       "Alaska",
-                       "Arizona",
-                       "Arkansas",
-                       "California",
-                       "Colorado",
-                       "Connecticut",
-                       "Delaware",
-                       "Florida",
-                       "Georgia",
-                       "Hawaii",
-                       "Idaho",
-                       "Illinois",
-                       "Indiana",
-                       "Iowa",
-                       "Kansas",
-                       "Kentucky",
-                       "Louisiana",
-                       "Maine",
-                       "Maryland",
-                       "Massachusetts",
-                       "Michigan",
-                       "Minnesota",
-                       "Mississippi",
-                       "Missouri",
-                       "Montana",
-                       "Nebraska",
-                       "Nevada",
-                       "New Hampshire",
-                       "New Jersey",
-                       "New Mexico",
-                       "New York",
-                       "North Carolina",
-                       "North Dakota",
-                       "Ohio",
-                       "Oklahoma",
-                       "Oregon",
-                       "Pennsylvania",
-                       # "Rhode Island",
-                       "South Carolina",
-                       "South Dakota",
-                       "Tennessee",
-                       "Texas",
-                       "Utah",
-                       # "Vermont",
-                       "Virginia",
-                       "Washington",
-                       # "West Virginia",
-                       "Wisconsin",
-                       # "Wyoming"
-                       ])
+import blog
+import gh
+import oai
+import wn
 
-city_data = requests.request(method="GET", url=f"https://data.opendatasoft.com/api/records/1.0/search/?dataset=us-cities-demographics%40public&q=&facet=city&facet=state&refine%2Estate={state}").json()["records"][math.floor(random.uniform(0, 5))]["fields"]
-city = city_data["city"]
-
-openai.api_key = os.getenv("OPENAI_API_KEY")
-# model = random.choice([model["id"] for model in openai.Model.list()["data"]])
-model = "text-davinci-003"
-topic = f"{city}, {state}"
-tone = random.choice([
-    "satirical", "downbeat", "humorous", "passive-aggressive", "biased", "historical"
+author = random.choice([
+    "Roddy Doyle",
+    "Lady Gregory",
+    "Seamus Heaney",
+    "C. S. Lewis",
+    "George Bernard Shaw",
+    "Colm Tóibín",
+    "Oscar Wilde"
+    "W. B. Yeats",
 ])
-prompt = f"Write a {tone} blog post about {topic} in complete sentences"
+
+model = "text-davinci-003"
+word_of_the_day = wn.fetch_word_of_the_day(api_key=os.getenv("WORDNIK_API_KEY"))
+print(f"word of the day: {word_of_the_day}")
+prompt = f"Write a short story about {word_of_the_day} in the style of {author}"
+print(f"prompt: {prompt}")
 temperature = round(random.uniform(0, 1), 1)
-body = openai.Completion.create(
-    model=model,
-    prompt=prompt,
-    max_tokens=1000,
-    temperature=temperature
-)["choices"][0]["text"].strip() + "\n"
-
-front_matter = f"""---
-title: "RoboBlog: {topic}"
-date: "{str(datetime.today().strftime("%Y-%m-%d"))}"
-publish: true
-excerpt: "{body[:50]}…"
-postType: "generative"
----
-#
-"""
-
-introduction = f"""
-***{prompt}***
-
-"""
-
-footer = f"""
----
-**Written using [Open AI](https://openai.com/)'s `{model}` model with a temperature of {str(temperature)}.**
-"""
-
-github_personal_access_token = os.getenv("PERSONAL_ACCESS_TOKEN")
-g = Github(github_personal_access_token)
-repo = g.get_repo("blairnangle/blairnangle-dot-com")
-subdir = topic.translate(str.maketrans('', '', string.punctuation)).lower().replace(' ', '-')
-repo.create_file(
-    path=f"./src/content/posts/generative/{subdir}/index.mdx",
-    message=f"[RoboBlog] Create generative blog post about {topic}",
-    content=front_matter + introduction + body + footer
-)
+topic = f"A short story about {word_of_the_day} in the style of {author}"
+print(f"topic: {topic}")
+openai_api_key = os.getenv("OPENAI_API_KEY")
+body = oai.generate_completion(api_key=openai_api_key, model=model, prompt=prompt, temperature=temperature)
+blog_post_content = blog.build_blog_post(topic=topic, prompt=prompt, body=body, model=model, temperature=temperature)
+gh.commit_blog_post(personal_access_token=os.getenv("PERSONAL_ACCESS_TOKEN"), topic=topic, content=blog_post_content)
