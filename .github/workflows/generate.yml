@@ -2,7 +2,8 @@ name: generate
 
 on:
   schedule:
-    - cron: "0 6 * * *"
+    - push
+#    - cron: "0 6 * * *"
 
 jobs:
   go:
