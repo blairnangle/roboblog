@@ -65,3 +65,7 @@ Create a fine-grained personal access token. The token needs to have the followi
 - Read and Write access to code and commit statuses
 
 Store the token as a GitHub Secret named `PERSONAL_ACCESS_TOKEN` (Secrets cannot have the `GITHUB_` prefix).
+
+## License
+
+Distributed under an [MIT License](./LICENSE)
