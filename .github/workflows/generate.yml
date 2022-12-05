@@ -1,8 +1,9 @@
 name: generate
 
 on:
-  schedule:
-    - push
+  push:
+    branches: [ main ]
+#  schedule:
 #    - cron: "0 6 * * *"
 
 jobs:
