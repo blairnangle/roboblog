@@ -18,4 +18,5 @@ jobs:
         env:
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          WORDNIK_API_KEY: ${{ secrets.WORDNIK_API_KEY }}
         run: ./go.py

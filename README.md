@@ -43,6 +43,9 @@ export PERSONAL_ACCESS_TOKEN=<insert GitHub fine-grained personal access token>
 
 ## Authentication
 
+Make sure to add tokens/keys as GitHub Secrets *and* ensure they are exported into the CI/CD
+environment in the relevant workflow in [`.github`](./.github).
+
 ### Wordnik
 
 Apply for an API key (this can take a few days). Once it has been granted, save it as a GitHub
