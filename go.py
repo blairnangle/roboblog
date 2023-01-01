@@ -15,7 +15,7 @@ author = random.choice([
     "C. S. Lewis",
     "George Bernard Shaw",
     "Colm Tóibín",
-    "Oscar Wilde"
+    "Oscar Wilde",
     "W. B. Yeats",
 ])
 
